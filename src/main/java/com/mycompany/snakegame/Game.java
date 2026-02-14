@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.time.Duration;
 import javax.swing.ImageIcon;
 
 public class Game extends java.awt.Frame implements KeyListener {
@@ -13,6 +12,7 @@ public class Game extends java.awt.Frame implements KeyListener {
     char dir = 's';
     Snake snake;
     Board board;
+    int ti = 200 ;
     boolean lose = false;
     Image headtop = new ImageIcon("headtop.png").getImage();
     Image headleft = new ImageIcon("headleft.png").getImage();
@@ -34,7 +34,6 @@ public class Game extends java.awt.Frame implements KeyListener {
 
     @Override
     public void paint(Graphics g) {
-        this.setBackground(Color.green);
         draw(g);
         board.width = this.getWidth();
         board.height = this.getHeight();
@@ -42,13 +41,13 @@ public class Game extends java.awt.Frame implements KeyListener {
     }
 
     public void paintComponent(Graphics g) {
-        g.drawImage(new ImageIcon("field.jpg").getImage(), this.getWidth() , this.getHeight() , this);
-
+        g.drawImage(new ImageIcon("field.jpg").getImage(), 0,0,this.getWidth() , this.getHeight() , this);
+        
         
     }
 
     public void draw(Graphics g) {
-
+        
         for (int i = 0; i < this.getWidth(); i += 50) {
             for (int j = 30; j < this.getHeight(); j += 50) {
                 if (i == snake.headx && j == snake.heady) {
@@ -70,10 +69,15 @@ public class Game extends java.awt.Frame implements KeyListener {
     }
 
     public void abend() {
+        if (snake.tail %5 == 0 )
+            ti-- ; 
+        this.jLabel1.setText((snake.tail)+"");
+        if(lose){this.jLabel1.setText("Game over "+ (snake.tail));
+        repaint();}
         if (snake.headx == board.fruitx && snake.heady == board.fruity) {
             snake.tailxx[snake.tail] = snake.headx;
             snake.tailyy[snake.tail] = snake.heady;
-
+            
             snake.tail++;
             board.generateFruite();
         }
@@ -92,11 +96,32 @@ public class Game extends java.awt.Frame implements KeyListener {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 exitForm(evt);
             }
         });
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(61, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(82, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(28, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(603, Short.MAX_VALUE))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -105,6 +130,7 @@ public class Game extends java.awt.Frame implements KeyListener {
     }//GEN-LAST:event_exitForm
 
     public void move(char ch) {
+
         if (ch == 's') {
 
             snake.heady += 50;
@@ -122,7 +148,7 @@ public class Game extends java.awt.Frame implements KeyListener {
             snake.headx -= 50;
             head = headleft ; 
         }
-        this.repaint();
+        
     }
 
     @Override
@@ -166,5 +192,6 @@ public class Game extends java.awt.Frame implements KeyListener {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
